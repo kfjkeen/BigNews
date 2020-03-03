@@ -176,6 +176,9 @@ body{
 .menu .level01 .rotate0{
     transform:rotate(0deg);
 }
+.menu .level02 .rotate0{
+    transform:rotate(90deg);
+}
 
 .menu .level02{
     background: #242732;
@@ -231,6 +234,11 @@ body{
     right:0;
     bottom:0;
     background-color: #f2f3f5;
+}
+
+.main iframe {
+    width: 100%;
+    height: 100%;
 }
 
 .search_form{
