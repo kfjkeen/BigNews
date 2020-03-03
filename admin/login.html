@@ -57,49 +57,54 @@
 </body>
 
 <script>
-// 请求地址：/admin/user/login
-// 请求方式：post
-// 请求参数：
-//   名称      	类型    	说明        
-//   username	string	用户名（admin）
-//   password	string	密码(123456)
-
-//注册事件
-$('.input_sub').click(function (e) { 
-  e.preventDefault();
-  //获取输入框信息
-  let txt =$('.input_txt').val().trim();
-  let pass =$('.input_pass').val().trim();
-  //非空判断
-  if(txt===''||pass===''){
-    $('.modal').modal();
-    $('.modal-body p').text('不要乱搞');  
-  }else{
-    //调用ajax发送请求
-    $.ajax({
-      type: "post",
-      url: "http://localhost:8080/api/v1/admin/user/login",
-      data:{
-        username:txt,
-        password:pass
-      },
-      dataType: "json",
-      success: function (response) {
-        console.log(response);
-        //登录成功时，保存token、跳转页面
-        if(response.code===200){
-          localStorage.setItem('token',response.token);
-          location.href='./index.html';
-        }else{
-          //调用模态框、修改提示内容
-          $('.modal').modal();
-          $('.modal-body p').text(response.msg);
-        }
-      }
-    });
-
-  }
+$(function(){
+  // 请求地址：/admin/user/login
+  // 请求方式：post
+  // 请求参数：
+  //   名称      	类型    	说明        
+  //   username	string	用户名（admin）
+  //   password	string	密码(123456)
   
-});
+  //注册事件
+  $('.input_sub').click(function (e) { 
+    e.preventDefault();
+    //获取输入框信息
+    let txt =$('.input_txt').val().trim();
+    let pass =$('.input_pass').val().trim();
+    //非空判断
+    if(txt===''||pass===''){
+      $('.modal').modal();
+      $('.modal-body p').text('不要乱搞');  
+    }else{
+      //调用ajax发送请求
+      $.ajax({
+        type: "post",
+        url: "http://localhost:8080/api/v1/admin/user/login",
+        data:{
+          username:txt,
+          password:pass
+        },
+        dataType: "json",
+        success: function (response) {
+          console.log(response);
+          //登录成功时，保存token、跳转页面
+          if(response.code===200){
+            localStorage.setItem('token',response.token);
+            location.href='./index.html';
+          }else{
+            //调用模态框、修改提示内容
+            $('.modal').modal();
+            $('.modal-body p').text(response.msg);
+          }
+        }
+      });
+  
+    }
+    
+  });
+
+
+
+})
 </script>
 </html>
