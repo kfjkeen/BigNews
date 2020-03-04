@@ -43,10 +43,11 @@
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
                     <div class="col-sm-10">
-                        <img src="images/2.jpg" alt="" class="user_pic">
-                        <input style="display: block" name="userPic" type="file" id="exampleInputFile">
-                        <!-- 给label标签的for属性赋值,值是input标签的id,那这样的话点击label就相当于点击了input -->
-                        <br>
+                        <label for="exampleInputFile">
+                            <img src="images/2.jpg" alt="" class="user_pic">
+                        </label>
+                        <input style="display: none" name="userPic" type="file" id="exampleInputFile">
+                    <!-- 给label标签的for属性赋值,值是input标签的id,那这样的话点击label就相当于点击了input -->
                         <label for="exampleInputFile">
                             <img src="./images/uploads_icon.jpg" style="height: 50px;" alt="">
                         </label>
@@ -70,4 +71,67 @@
     </div>
 </body>
 
+<script src="./js/http.js"></script>
+<script>
+$(function(){
+    //请求详情
+    $.ajax({
+        type: "get",
+        url: urls.user_detail,
+        dataType: "json",
+        success: function (response) {
+            // console.log(response);
+            // $('input.username').val(response.data.username);
+            // $('input.nick name').val(response.data.nickname);
+            // $('input.email').val(response.data.email);
+            // $('img.user_pic').attr('src',response.data.userPic);
+            // $('input.password').val(response.data.password);
+            //for in修改表单数据
+           for(let key in response.data){
+               $(`input.${key}`).val(response.data[key]);
+            }
+            $('img.user_pic').attr('src',response.data.userPic);
+        }
+    });
+
+    //文件预览 change事件
+    $('#exampleInputFile').change(function () { 
+        //转为src路径
+        let src =URL.createObjectURL(this.files[0]);
+        // 修改图片 html中label关联
+        $('img.user_pic').attr('src',src);
+    });
+    //点击事件
+    $('.btn-edit').click(function (e) { 
+        e.preventDefault();
+        const fd = new FormData(this.form);
+        $.ajax({
+            type: "post",
+            url: urls.user_edit,
+            data: fd,
+            dataType: "json",
+            //FormData不需要请求头，不需要转换字符串
+            contentType:false,
+            processData:false,
+            success: function (response) {
+                // console.log(response);
+                if(response.code===200){
+                    // window.parent.location.reload();
+                    let src = $('img.user_pic').attr('src');
+                    let nickname = $('input.nickname').val();
+                    // // 修改父级页面中的图片、昵称
+                    window.parent.$('.user_info img,.user_center_link img').attr('src', src);
+                    window.parent.$('.user_info strong').html(nickname);
+                }
+            }
+        });
+        
+    });
+
+
+
+
+})
+
+</script>
 </html>
