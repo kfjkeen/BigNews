@@ -74,4 +74,59 @@
     </div>
 </body>
 
+<script src="./js/http.js"></script>
+<script src="./libs/template-web.js"></script>
+<!-- 模板1 -->
+<script id="cateOption" type="text/html">
+    <option value="">所有分类</option>
+    {{each data}}
+    <option value="{{$value.id}}">{{$value.name}}</option>
+    {{/each}}    
+</script>
+<script>
+$(function(){
+    $.ajax({
+        type: "get",
+        url: urls.category_list,
+        dataType: "json",
+        success: function (response) {
+            // console.log(response);
+            if(response.code===200){
+                const htmlStr =template('cateOption',response);
+                $('#selCategory').html(htmlStr);
+            }
+        }
+    });
+    $('#btnSearch').click(function (e) { 
+        e.preventDefault();
+        $.ajax({
+            type: "get",
+            url: urls.article_query,
+            data:{                   
+//                 请求参数：
+
+// 名称   	  类型  	说明                     
+// key  	string	搜索关键词，可以为空，为空返回某类型所有文章 
+// type  	string	文章类型id，可以为空，为空返回所有类型文章 
+// state 	string	文章状态，草稿 ，已发布,为空返回所有状态文章
+// page  	number	当前页，为空返回第1页            
+// perpage	number	每页显示条数，为空默认每页6条        
+                type:$('#selCategory').val(),
+                state:$('#selStatus').val(),
+                key:'',
+                page:1,
+                perpage:10
+            },
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+            }
+        });
+    });
+
+
+    
+})    
+</script>
+
 </html>

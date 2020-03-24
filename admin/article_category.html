@@ -35,15 +35,15 @@
                         <td>奇趣事</td>
                         <td>funny</td>
                         <td class="text-center">
-                            <a href="javascript:void(0)" data-toggle="modal" class=" btn btn-info btn-xs">编辑</a>
-                            <a href="javascript:void(0)" class="btn btn-danger btn-xs">删除</a>
+                            <a href="#" data-toggle="modal" class=" btn btn-info btn-xs">编辑</a>
+                            <a href="#" class="btn btn-danger btn-xs">删除</a>
                         </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-center">
-                            <a href="javascript:void(0)" class="btn btn-success" id="xinzengfenlei" data-toggle="modal"
+                            <a href="#" class="btn btn-success" id="xinzengfenlei" data-toggle="modal"
                                 data-target="#myModal">新增分类</a>
                         </td>
                     </tr>
@@ -51,5 +51,77 @@
             </table>
         </div>
     </div>
+    <!-- 新增模态框 -->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">文章分类操作</h4>
+            </div>
+            <div class="modal-body">
+              <!-- 表单结构 -->
+              <form class="form-horizontal">
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">分类名称</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" id="inputEmail3" placeholder="name">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputPassword3" class="col-sm-2 control-label">分类别名</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPassword3" placeholder="slug">
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button type="button" class="btn btn-primary">分类</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+</body>
 
+<script src="./js/http.js"></script>
+<script id="list" type="text/html">
+    {{each data}}
+    <tr>
+        <td>{{$value.name}}</td>
+        <td>{{$value.slug}}</td>
+        <td class="text-center">
+            <a data-id="{{$value.id}}" href="javascript:void(0)" data-toggle="modal" class=" btn btn-info btn-xs">编辑</a>
+            <a data-id="{{$value.id}}" href="javascript:void(0)" class="btn btn-danger btn-xs">删除</a>
+        </td>
+    </tr>
+    {{/each}}
+</script>
+<script>
+$(function(){
+    //封装获取列表并渲染
+    function getListRender(){
+     $.ajax({
+         type: "get",
+         url: urls.category_list,
+         dataType: "json",
+         success: function (response) {
+            //  console.log(response);
+            //利用模板渲染到页面
+            const htmlStr =template('list',response);
+            $('tbody').html(htmlStr);
+         }
+     });
+    }
+    getListRender();
+
+    $('.modal').on('show.bs.modal',()=>{
+        $('.modal-body').append(`<h3>bbb</h3>`)
+    })
+
+
+
+})
+</script>
 </html>
